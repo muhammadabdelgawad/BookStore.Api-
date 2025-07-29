@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Models.Configurations;
 using Models.Entities;
 
 namespace Data_Access.Data
@@ -14,7 +15,9 @@ namespace Data_Access.Data
       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
             base.OnModelCreating(modelBuilder);
 
         }
