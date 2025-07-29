@@ -12,4 +12,4 @@ namespace BookStore.Api.DTOs.CategoryDto
         public int CatOrder { get; set; }
     }
 }
-}
+

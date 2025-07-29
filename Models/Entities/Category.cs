@@ -17,5 +17,6 @@ namespace Models.Entities
         public bool MarkedAsDeleted { get; set; } = false;
 
         public ICollection<Product> Products { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

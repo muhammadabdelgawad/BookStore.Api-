@@ -1,5 +1,6 @@
 ﻿
 using Data_Access.Data;
+using Microsoft.EntityFrameworkCore;
 using Models.Entities;
 
 namespace Data_Access.Repositories
@@ -19,22 +20,22 @@ namespace Data_Access.Repositories
 
         public void DeleteCategory(Category category)
         {
-            throw new NotImplementedException();
+            _dbContext.Categories.Remove(category);
         }
 
-        public Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            throw new NotImplementedException();
+           return await _dbContext.Categories.ToListAsync();
         }
 
-        public Task<Category> GetCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Categories.FindAsync(id);
         }
 
         public void UpdateCategory(Category category)
         {
-            throw new NotImplementedException();
+            _dbContext.Categories.Update(category);
         }
     }
 }
