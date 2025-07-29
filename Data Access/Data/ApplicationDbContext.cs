@@ -20,6 +20,12 @@ namespace Data_Access.Data
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             base.OnModelCreating(modelBuilder);
 
+
+            //indexing For Category CatName
+            modelBuilder.Entity<Category>()
+                        .HasIndex(c => c.CatName)
+                        .IsUnique(); // Ensure CatName is unique
+
             // Seed data for Products
             modelBuilder.Entity<Product>().HasData(
                 new Product { Id = 1, Title = "Laptop", Author = "ahmed", Description = "test01", Price = 450, CategoryId = 1, },
