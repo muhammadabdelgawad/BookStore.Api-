@@ -22,7 +22,8 @@ namespace BookStore.Api
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
-
+         
+            builder.Services.AddResponseCaching();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

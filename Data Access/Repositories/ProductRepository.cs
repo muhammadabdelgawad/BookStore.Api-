@@ -30,7 +30,7 @@ namespace Data_Access.Repositories
             return await _dbContext.Products.ToListAsync();
         }
 
-        public async Task<Product> GetProductyByIdAsync(int id)
+        public async Task<Product> GetProductByIdAsync(int id)
         {
            return await _dbContext.Products.FindAsync(id);
         }
