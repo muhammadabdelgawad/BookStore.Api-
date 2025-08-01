@@ -5,6 +5,7 @@ using BookStore.Api.DTOs.CategoryDto;
 using BookStore.Api.DTOs.ProductDto;
 using Data_Access.UnitOfWork;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 
@@ -87,6 +88,30 @@ namespace BookStore.Api.Controllers
             await _unitOfWork.CompleteAsync();
             return NoContent();
         }
+
+
+
+        [HttpPatch("{id:int}")]
+        public async Task<IActionResult> ProductPatch(int id ,[FromBody] JsonPatchDocument<UpdateProductDto> patchDocument ) 
+        {
+            if (patchDocument == null)
+                return BadRequest("Patch document is required.");
+
+            var product = await _unitOfWork.Products.GetProductByIdAsync(id);
+            if (product == null)
+                return NotFound();
+
+            var productToPatch = _mapper.Map<UpdateProductDto>(product);
+            patchDocument.ApplyTo(productToPatch, ModelState);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            _mapper.Map(productToPatch, product);
+            _unitOfWork.Products.UpdateProduct(product);
+            await _unitOfWork.CompleteAsync();
+            return NoContent();
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
