@@ -32,9 +32,10 @@ namespace Data_Access.Repositories
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-           return await _dbContext.Products.FindAsync(id);
+           return await _dbContext.Products
+                .FindAsync(id);
         }
-
+      
         public void UpdateProduct(Product product)
         {
             _dbContext.Products.Update(product);

@@ -10,5 +10,6 @@ namespace BookStore.Api.DTOs.ProductDto
         public string Author { get; set; }
         public double Price { get; set; }
         public int CategoryId { get; set; }
+        public String CategoryName { get; set; }
     }
 }

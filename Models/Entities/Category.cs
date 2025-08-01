@@ -14,8 +14,7 @@ namespace Models.Entities
         
         public int CatOrder { get; set; }
 
-        public bool MarkedAsDeleted { get; set; } = false;
-
+        public bool MarkedAsDeleted { get; set; } 
         public ICollection<Product> Products { get; set; }
         public DateTime CreatedDate { get; set; }
     }
