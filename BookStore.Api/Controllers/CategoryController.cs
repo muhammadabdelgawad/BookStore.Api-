@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using BookStore.Api.DTOs.CategoryDto;
 using BookStore.Api.Helper;
 using Data_Access.UnitOfWork;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Models.Entities;
@@ -28,7 +25,7 @@ namespace BookStore.Api.Controllers
 
        
 
-
+        
         [HttpGet(Name = "Get All Categories")]
         public async Task<IActionResult> GetAllCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
         {

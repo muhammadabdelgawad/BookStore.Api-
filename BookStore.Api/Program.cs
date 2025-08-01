@@ -60,6 +60,12 @@ namespace BookStore.Api
                     Location = ResponseCacheLocation.Any,
                 });
             });
+
+               // Add JsonPatchDocument
+            builder.Services.AddControllers()
+                            .AddNewtonsoftJson(); 
+
+
             var app = builder.Build();
 
 

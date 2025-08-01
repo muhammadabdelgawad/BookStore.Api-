@@ -28,6 +28,7 @@ namespace BookStore.Api.Controllers
 
         [MapToApiVersion(1)]
         [HttpGet]
+        [ResponseCache(CacheProfileName = "Defualt60")]
         public async Task<IActionResult> GetAllProductsV1()
         {
             var products = await _unitOfWork.Products.GetAllProductsAsync();
