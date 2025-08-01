@@ -23,5 +23,7 @@ namespace Data_Access.UnitOfWork
         public void Dispose() => _dbContext.Dispose();
 
       
+            public async Task<int> CompleteAsync() => await _dbContext.SaveChangesAsync();
+    
     }
 }

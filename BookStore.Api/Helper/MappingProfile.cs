@@ -14,7 +14,7 @@ namespace BookStore.Api.Helper
                 .ForMember(CR => CR.Name, O => O.MapFrom(C => C.CatName))
                 .ForMember(CR => CR.CategoryOrder, O => O.MapFrom(C => C.CatOrder));
 
-            CreateMap<CategoryResponseDto, Category>();
+            CreateMap<CreateCategoryDto, Category>();
             CreateMap<UpdateCategoryDto, Category>().ReverseMap();
             // .ForMember(PR=>PR.Brand, O=>O.MapFrom(P=>P.Brand.Name))
             //.ForMember(PR => PR.Type, O => O.MapFrom(P => P.Type.Name))

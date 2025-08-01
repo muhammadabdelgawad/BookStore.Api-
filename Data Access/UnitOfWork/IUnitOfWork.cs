@@ -9,6 +9,6 @@ namespace Data_Access.UnitOfWork
     {
         ICategoryRepository Categories { get; }
         IProductRepository Products { get; }
-        Task  SaveAsync();
+        Task<int> CompleteAsync();
     }
 }

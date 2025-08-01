@@ -28,7 +28,22 @@ namespace BookStore.Api.Controllers
             return product is null ? NotFound() : Ok(product);
         }
 
-       
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto dto)
+        {
+            if (dto == null)
+                return BadRequest("Product data is required.");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var product = _mapper.Map<Product>(dto);
+            await _unitOfWork.Products.AddProductAync(product);
+            await _unitOfWork.SaveAsync();
+            
+            var result = _mapper.Map<ProductResponseDto>(product);
+            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, result);
+        }
+
 
     }
 }
