@@ -25,7 +25,13 @@ namespace BookStore.Api
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             builder.Services.AddApiVersioning(options =>
-            { options.ApiVersionReader= new UrlSegmentApiVersionReader(); });
+            { options.ApiVersionReader = new UrlSegmentApiVersionReader(); })
+                .AddApiExplorer(options =>
+                {
+                    options.GroupNameFormat = "'v'V";
+                    options.SubstituteApiVersionInUrl = true;
+                });
+              
         
             builder.Services.AddResponseCaching();
             var app = builder.Build();
