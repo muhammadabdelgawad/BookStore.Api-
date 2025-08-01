@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Reflection;
+using Asp.Versioning;
+using AutoMapper;
+using BookStore.Api.DTOs.CategoryDto;
 using BookStore.Api.DTOs.ProductDto;
 using Data_Access.UnitOfWork;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +10,9 @@ using Models.Entities;
 
 namespace BookStore.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion (1)]
+    [ApiVersion (2)]
+    [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -21,7 +26,18 @@ namespace BookStore.Api.Controllers
         }
 
 
-        [HttpGet("id")]
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllProducts()
+        {
+            var products = await _unitOfWork.Products.GetAllProductsAsync();
+            var result = _mapper.Map<IEnumerable<ProductResponseDto>>(products);
+            return Ok(result);
+        }
+
+
+
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
             var product = await _unitOfWork.Products.GetProductByIdAsync(id);
@@ -38,10 +54,41 @@ namespace BookStore.Api.Controllers
             
             var product = _mapper.Map<Product>(dto);
             await _unitOfWork.Products.AddProductAync(product);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.CompleteAsync();
             
             var result = _mapper.Map<ProductResponseDto>(product);
             return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, result);
+        }
+
+
+        [HttpPut("{id}")]
+
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateProductDto dto)
+        {
+            if (dto == null)
+                return BadRequest("Product data is required.");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var product = await _unitOfWork.Products.GetProductByIdAsync(id);
+            if (product == null)
+                return NotFound();
+            _mapper.Map(dto, product);
+            _unitOfWork.Products.UpdateProduct(product);
+            await _unitOfWork.CompleteAsync();
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id <= 0)
+                return BadRequest("Invalid Product id.");
+            var product = await _unitOfWork.Products.GetProductByIdAsync(id);
+            if (product == null)
+                return NotFound();
+            _unitOfWork.Products.DeleteProduct(product);
+            await _unitOfWork.CompleteAsync();
+            return NoContent();
         }
 
 
