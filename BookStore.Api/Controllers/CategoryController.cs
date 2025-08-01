@@ -2,9 +2,11 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using BookStore.Api.DTOs.CategoryDto;
+using BookStore.Api.Helper;
 using Data_Access.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Models.Entities;
 
 namespace BookStore.Api.Controllers
@@ -15,22 +17,68 @@ namespace BookStore.Api.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public CategoryController(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IMemoryCache _memoryCache;
+        public CategoryController(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _memoryCache= memoryCache;
         }
 
-        
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+
+        // [HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    var categories = await _unitOfWork.Categories.GetAllCategoriesAsync();
+        //    var result = _mapper.Map<IEnumerable<CategoryResponseDto>>(categories);
+        //    return Ok(result);
+        //}
+
+
+        [HttpGet(Name = "Get All Categories")]
+        public async Task<IActionResult> GetAllCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
         {
-            var categories = await _unitOfWork.Categories.GetAllCategoriesAsync();
-            var result = _mapper.Map<IEnumerable<CategoryResponseDto>>(categories);
+            const string cacheKey = "categoryList";
+            if (!_memoryCache.TryGetValue(cacheKey, out List<CategoryResponseDto> cachedCategories))
+            {
+                var categories = await _unitOfWork.Categories.GetAllCategoriesAsync();
+
+                cachedCategories = _mapper.Map<List<CategoryResponseDto>>(categories);
+
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+
+                _memoryCache.Set(cacheKey, cachedCategories, cacheOptions);
+
+                categories = categories
+                    .OrderBy(c => c.CatOrder)
+                    .ThenBy(c => c.CatName)
+                    .ToList();
+
+
+            }
+            var totalItems = cachedCategories.Count;
+            var pagedData = cachedCategories
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+
+            var result = new Pagination<CategoryResponseDto>
+            {
+
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalItems,
+                Data= pagedData
+
+            };
             return Ok(result);
         }
 
-        
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
