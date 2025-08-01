@@ -21,7 +21,7 @@ namespace BookStore.Api.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Category
+        
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -30,7 +30,7 @@ namespace BookStore.Api.Controllers
             return Ok(result);
         }
 
-        // GET: api/Category/{id}
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -43,8 +43,8 @@ namespace BookStore.Api.Controllers
             return Ok(result);
         }
 
-        // POST: api/Category
-        [HttpPost]
+        
+        [HttpPost(Name ="Create Category")]
         public async Task<IActionResult> Create([FromBody] CreateCategoryDto dto)
         {
             if (dto == null)
@@ -58,8 +58,8 @@ namespace BookStore.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, result);
         }
 
-        // PUT: api/Category/{id}
         [HttpPut("{id}")]
+
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCategoryDto dto)
         {
             if (dto == null)
@@ -75,7 +75,7 @@ namespace BookStore.Api.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Category/{id}
+       
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
