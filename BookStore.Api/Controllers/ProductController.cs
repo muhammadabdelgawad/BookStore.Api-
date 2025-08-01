@@ -26,9 +26,18 @@ namespace BookStore.Api.Controllers
         }
 
 
-
+        [MapToApiVersion(1)]
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProductsV1()
+        {
+            var products = await _unitOfWork.Products.GetAllProductsAsync();
+            var result = _mapper.Map<IEnumerable<ProductResponseDto>>(products);
+            return Ok(result);
+        }
+
+        [MapToApiVersion(2)]
+        [HttpGet]
+        public async Task<IActionResult> GetAllProductsV2()
         {
             var products = await _unitOfWork.Products.GetAllProductsAsync();
             var result = _mapper.Map<IEnumerable<ProductResponseDto>>(products);

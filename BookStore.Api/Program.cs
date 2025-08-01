@@ -22,17 +22,27 @@ namespace BookStore.Api
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+          
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+            // Add API Versioning
 
             builder.Services.AddApiVersioning(options =>
-            { options.ApiVersionReader = new UrlSegmentApiVersionReader(); })
-                .AddApiExplorer(options =>
-                {
-                    options.GroupNameFormat = "'v'V";
-                    options.SubstituteApiVersionInUrl = true;
-                });
-              
-        
+                  {
+                      // Configure API versioning options
+                      options.DefaultApiVersion = new ApiVersion(1); // Default version
+                      options.AssumeDefaultVersionWhenUnspecified = true; // Assume default version when not specified
+                      options.ReportApiVersions = true;   // Report API versions in response headers 
+
+                      options.ApiVersionReader = new UrlSegmentApiVersionReader();
+                  })
+                     //  For Swagger support with API Versioning
+                     .AddApiExplorer(options =>
+                     {
+                         options.GroupNameFormat = "'v'V";
+                         options.SubstituteApiVersionInUrl = true;
+                     });
+                   
+
             builder.Services.AddResponseCaching();
             var app = builder.Build();
 
