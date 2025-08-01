@@ -53,7 +53,7 @@ namespace BookStore.Api.Controllers
                 return BadRequest(ModelState);
             var category = _mapper.Map<Category>(dto);
             await _unitOfWork.Categories.AddCategoryAync(category);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.CompleteAsync();
             var result = _mapper.Map<CategoryResponseDto>(category);
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, result);
         }
@@ -71,7 +71,7 @@ namespace BookStore.Api.Controllers
                 return NotFound();
             _mapper.Map(dto, category);
             _unitOfWork.Categories.UpdateCategory(category);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.CompleteAsync();
             return NoContent();
         }
 
@@ -85,7 +85,7 @@ namespace BookStore.Api.Controllers
             if (category == null)
                 return NotFound();
             _unitOfWork.Categories.DeleteCategory(category);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.CompleteAsync();
             return NoContent();
         }
     }

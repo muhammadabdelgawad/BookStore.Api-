@@ -1,4 +1,5 @@
 
+using Asp.Versioning;
 using BookStore.Api.Helper;
 using Data_Access.Data;
 using Data_Access.UnitOfWork;
@@ -22,7 +23,10 @@ namespace BookStore.Api
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
-         
+
+            builder.Services.AddApiVersioning(options =>
+            { options.ApiVersionReader= new UrlSegmentApiVersionReader(); });
+        
             builder.Services.AddResponseCaching();
             var app = builder.Build();
 
