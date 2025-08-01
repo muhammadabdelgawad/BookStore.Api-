@@ -26,13 +26,7 @@ namespace BookStore.Api.Controllers
         }
 
 
-        // [HttpGet]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    var categories = await _unitOfWork.Categories.GetAllCategoriesAsync();
-        //    var result = _mapper.Map<IEnumerable<CategoryResponseDto>>(categories);
-        //    return Ok(result);
-        //}
+       
 
 
         [HttpGet(Name = "Get All Categories")]
