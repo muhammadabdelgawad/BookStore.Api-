@@ -3,6 +3,7 @@ using Asp.Versioning;
 using BookStore.Api.Helper;
 using Data_Access.Data;
 using Data_Access.UnitOfWork;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Api
@@ -42,10 +43,25 @@ namespace BookStore.Api
                          options.GroupNameFormat = "'v'V";
                          options.SubstituteApiVersionInUrl = true;
                      });
-                   
+             
 
-            builder.Services.AddResponseCaching();
+            builder.Services.AddResponseCaching();//Response caching
+            builder.Services.AddControllers(options =>
+            {
+                options.CacheProfiles.Add("Defualt60", new CacheProfile
+                {
+                    Duration =60,
+                    Location = ResponseCacheLocation.Client,
+                    NoStore = false
+                });
+                options.CacheProfiles.Add("Short30", new CacheProfile
+                {
+                    Duration = 30,
+                    Location = ResponseCacheLocation.Any,
+                });
+            });
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -57,7 +73,7 @@ namespace BookStore.Api
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseResponseCaching(); // Enable response caching
 
             app.MapControllers();
 
