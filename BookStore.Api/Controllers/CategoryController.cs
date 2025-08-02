@@ -99,7 +99,7 @@ namespace BookStore.Api.Controllers
 
         [HttpPut("{id}")]
 
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateCategoryDto dto)
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto dto)
         {
             if (dto == null)
                 return BadRequest("Category data is required.");
