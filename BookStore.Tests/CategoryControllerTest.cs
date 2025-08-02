@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using AutoMapper;
 using BookStore.Api.Controllers;
 using BookStore.Api.DTOs.CategoryDto;
 using BookStore.Api.Helper;
 using Data_Access.UnitOfWork;
-using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Models.Entities;
